@@ -67,7 +67,6 @@ const EntrySchema = z.object({
   input: z.string(),
   method: z.string(),
   from: z.string(),
-  forecast: z.any().optional(),
   _id: z.string()
 })
 // PUT handler

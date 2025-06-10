@@ -68,7 +68,7 @@ const editEntry = async (e) => {
           <option value="city">City</option>
         </select>
         <input placeholder="Location" value={input} onChange={e=>setInput(e.target.value)} />
-        <input type="number" value={from} onChange={e=>setFrom(e.target.value)} />
+        <input type="number" placeholder="no of days" value={from} onChange={e=>setFrom(e.target.value)} />
         <button onClick={createEntry}>Save</button>
       </div>
       {loading && <p>Saving...</p>}
