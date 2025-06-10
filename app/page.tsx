@@ -25,7 +25,7 @@ const createEntry = async () => {
       const res = await fetch('/api', {
               method: 'PUT',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ _id, method, input, from})
+              body: JSON.stringify({ _id, input, from})
             })
             const data = await res.json()
             setLoading(false)

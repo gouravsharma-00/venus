@@ -65,16 +65,21 @@ export async function GET() {
 
 const EntrySchema = z.object({
   input: z.string(),
-  method: z.string(),
   from: z.string(),
   _id: z.string()
 })
 // PUT handler
 export async function PUT(request: Request) {
   const body = await request.json()
+console.log(body)
+  // Validate input fields
+  const parsed = EntrySchema.safeParse(body)
+  if (!parsed.success) {
+    return NextResponse.json({ error: parsed.error.format() }, { status: 400 })
+  }
 
-  const parse = EntrySchema.parse(body)
-  const { _id, input, from, method } = parse
+  const { _id, input, from } = parsed.data
+
 
 
   // Validate location via WeatherAPI search
@@ -91,6 +96,7 @@ export async function PUT(request: Request) {
     `https://api.weatherapi.com/v1/forecast.json?key=${process.env.WEATHER_KEY}&q=${input}&days=${from}`
   )
   const weatherData = await forecastRes.json()
+  const forecast = weatherData?.forecast?.forecastday || []
 
   const client = await clientPromise
   const db = client.db()
@@ -99,11 +105,9 @@ export async function PUT(request: Request) {
     { _id: new ObjectId(_id) },
     {
       $set: {
-        input,
-        method,
+        location: input,
         from,
-        forecast: weatherData.forecast.forecastday || [],
-        location: places[0].name
+        forecast,
       }
     }
   )
